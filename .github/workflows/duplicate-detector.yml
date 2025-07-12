@@ -15,12 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set Up Python
+      - name: Setup python
         uses: actions/setup-python@v5
         with:
+          cache: 'pip'
           python-version: '3.11'
-      
-      - name: Install dependencies
         run: pip install pygithub scikit-learn sentence-transformers
 
       - name: Run duplicate detection

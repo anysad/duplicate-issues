@@ -14,7 +14,7 @@ github_client = Github(token)
 repo = github_client.get_repo(repname)
 
 def get_description(text):
-    match = re.search(r'Description.*?\n(.*?)\n(?:\w|\Z)', text, re.DOTALL)
+    match = re.search(r'Description.*?\n(.*?)(?:\n## |\Z)', text, re.DOTALL)
     if match:
         return match.group(1).strip()
     return None
