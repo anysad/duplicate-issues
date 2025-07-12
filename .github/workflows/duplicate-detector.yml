@@ -1,0 +1,27 @@
+name: Detect Duplicate Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  detect-duplicates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies:
+        run: pip install -r .github/workflow/requirements.txt
+
+      - name: Run duplicate detection
+        run: python .github/workflow/detect_duplicates.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
