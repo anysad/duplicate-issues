@@ -20,11 +20,11 @@ def get_description(text):
     return None
 
 new_issue = repo.get_issue(int(issue_number))
-new_issue_body = get_description(new_issue.body)
-print(new_issue_body)
-new_issue_text = new_issue.title + " " + (new_issue_body or " ")
 
+new_issue_body = get_description(new_issue.body)
+new_issue_text = new_issue.title + " " + (new_issue_body or " ")
 new_issue_embedding = model.encode([new_issue_text])
+print(new_issue_text)
 
 similarities = []
 for issue in repo.get_issues(state='open'):
@@ -34,8 +34,10 @@ for issue in repo.get_issues(state='open'):
     issue_body = get_description(issue.body)
     issue_text = issue.title + " " + (issue_body or " ")
     issue_embedding = model.encode([issue_text])
+    print(issue_text)
 
     similarity = cosine_similarity(new_issue_embedding, issue_embedding)[0][0]
+    print(similarity)
 
     if similarity > 0.75:
         similarities.append((issue.number, similarity, issue.title))
