@@ -20,12 +20,12 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip'
-          
+
       - name: Install dependencies
         run: pip install pygithub scikit-learn sentence-transformers
 
       - name: Run duplicate detection
-        run: python .github/workflows/detect_duplicates.py
+        run: python .github/scripts/duplicate_detection/script.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
