@@ -19,7 +19,7 @@ def get_description(text):
         return match.group(1).strip()
     return None
 
-new_issue = repo.get_issue(issue_number)
+new_issue = repo.get_issue(int(issue_number))
 new_issue_body = get_description(new_issue.body)
 new_issue_text = new_issue.title + " " + (new_issue_body or " ")
 
