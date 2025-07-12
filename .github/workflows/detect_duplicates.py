@@ -21,6 +21,7 @@ def get_description(text):
 
 new_issue = repo.get_issue(int(issue_number))
 new_issue_body = get_description(new_issue.body)
+print(new_issue_body)
 new_issue_text = new_issue.title + " " + (new_issue_body or " ")
 
 new_issue_embedding = model.encode([new_issue_text])
@@ -42,7 +43,7 @@ for issue in repo.get_issues(state='open'):
 if similarities:
     comment = "✍️ Potential duplicates:\n"
     for number, similarity, title in similarities:
-        comment += f"- #{number} ({similarity:.2}) - {title}\n"
+        comment += f"- #{number} ({similarity * 100:.1f}%)\n"
     new_issue.create_comment(comment)
 else:
     print('❌ No similiar issues were found.')
