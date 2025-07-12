@@ -17,7 +17,7 @@ jobs:
           python-version: '3.11'
       
       - name: Install dependencies
-        run: pip install -r .github/workflows/requirements.txt
+        run: pip install pygithub scikit-learn sentence-transformers
 
       - name: Run duplicate detection
         run: python .github/workflows/detect_duplicates.py
