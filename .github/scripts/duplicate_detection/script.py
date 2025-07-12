@@ -19,10 +19,17 @@ def get_description(text):
         return match.group(1).strip()
     return None
 
+def get_str(text):
+    match = re.search(r'Steps to Reproduce.*?\n(.*?)(?:\n## |\Z)', text, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return None
+
 new_issue = repo.get_issue(int(issue_number))
 
-new_issue_body = get_description(new_issue.body)
-new_issue_text = new_issue.title + " " + (new_issue_body or " ")
+new_issue_desc = get_description(new_issue.body)
+new_issue_str = get_str(new_issue.body)
+new_issue_text = new_issue.title + " " + (new_issue_desc or " ")
 new_issue_embedding = model.encode([new_issue_text])
 
 similarities = []
@@ -30,8 +37,9 @@ for issue in repo.get_issues(state='open'):
     if issue.number == new_issue.number:
         continue
 
-    issue_body = get_description(issue.body)
-    issue_text = issue.title + " " + (issue_body or " ")
+    issue_desc = get_description(issue.body)
+    issue_str = get_str(issue.body)
+    issue_text = issue.title + " " + (issue_desc or " ") + " " + (issue_str or " ")
     issue_embedding = model.encode([issue_text])
 
     similarity = cosine_similarity(new_issue_embedding, issue_embedding)[0][0]
