@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install dependencies:
+      - name: Install dependencies
         run: pip install -r .github/workflow/requirements.txt
 
       - name: Run duplicate detection
