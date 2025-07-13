@@ -52,7 +52,7 @@ class DuplicateDeterminer:
                 }
             ]
 
-            response = ollama.chat(model='llama3.2:1b', messages=messages)
+            response = ollama.chat(model='llama3.2:3b', messages=messages)
             result = response['message']['content']
 
             if result.lower() == 'true':
