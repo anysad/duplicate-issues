@@ -44,7 +44,7 @@ for issue in repo.get_issues(state='open'):
 
     similarity = cosine_similarity(new_issue_embedding, issue_embedding)[0][0]
 
-    if similarity > 0.7:
+    if similarity > 0.67:
         similarities.append((issue.number, similarity, issue.title))
 
 if similarities:
