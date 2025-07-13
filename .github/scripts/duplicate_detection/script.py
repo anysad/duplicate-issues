@@ -43,15 +43,15 @@ for issue in repo.get_issues(state='open'):
     issue_embedding = model.encode([issue_text])
 
     similarity = cosine_similarity(new_issue_embedding, issue_embedding)[0][0]
-    print(similarity)
 
-    if similarity > 0.69: # nice
+    if similarity > 0.7:
         similarities.append((issue.number, similarity, issue.title))
 
 if similarities:
     comment = "✍️ Potential duplicates:\n"
     for number, similarity, title in similarities:
-        comment += f"- #{number} ({similarity * 100:.1f}%)\n"
+        print(f"Similarity: {similarity * 100:.2f}%")
+        comment += f"- #{number} ({similarity * 100:.2f}%)\n"
     new_issue.create_comment(comment)
 else:
     print('❌ No similiar issues were found.')
