@@ -20,6 +20,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Setup Ollama
+        uses: ai-action/setup-ollama@v1
+
       - name: Cache python packages
         id: cache-python
         uses: actions/cache@v3
