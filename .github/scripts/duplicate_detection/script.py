@@ -29,7 +29,7 @@ new_issue = repo.get_issue(int(issue_number))
 
 new_issue_desc = get_description(new_issue.body)
 new_issue_str = get_str(new_issue.body)
-new_issue_text = new_issue.title + " " + (new_issue_desc or " ")
+new_issue_text = new_issue.title + " " + (new_issue_desc or " ") + " " + (new_issue_str or " ")
 new_issue_embedding = model.encode([new_issue_text])
 
 similarities = []
