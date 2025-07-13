@@ -45,7 +45,7 @@ class DuplicateDeterminer:
             self.full_transcript.append({'role': 'user', 'content': 'Is this issue a duplicate of the following issue?\nNew Issue:\n'+ self.new_issue_text + '\n\nExisting Issue:\n' + issue_text })
 
             ollama_response = ollama.chat(
-                model='llama3',
+                model='llama3.2:3b',
                 messages=self.full_transcript
             )
 
