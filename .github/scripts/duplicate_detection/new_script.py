@@ -19,13 +19,7 @@ class DuplicateDeterminer:
 
         self.system_prompt = {
             'role': 'system',
-            'content': (
-                'You are an expert assistant designed to determine if two GitHub issues describe the same underlying problem. '
-                'You will be given a "New Issue" and an "Existing Issue". '
-                'If they clearly describe the same or very similar technical issue, return **only** the word "True". '
-                'If they are unrelated or different issues, return **only** the word "False". '
-                'Do not explain your reasoning. Do not include any other text.'
-            )
+            'content': 'You are an expert assistant designed to determine if two GitHub issues describe the same underlying problem. You will be given a "New Issue" and an "Existing Issue". If they clearly describe the same or very similar issue, return **only** the word "True". If they are unrelated or different issues, return **only** the word "False". Do not explain your reasoning. Do not include any other text.'
         }
     
     def get_issue_description(self, text):
@@ -58,11 +52,8 @@ class DuplicateDeterminer:
                 }
             ]
 
-            response = ollama.chat(model='llama3.2:3b', messages=messages)
+            response = ollama.chat(model='llama3.2:1b', messages=messages)
             result = response['message']['content']
-
-            print(f'Comparing two issues: {self.issue_number} and {issue.number}')
-            print(f'Response: {result}')
 
             if result.lower() == 'true':
                 duplicates.append(issue.number)

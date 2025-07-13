@@ -15,11 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
       - name: Setup ollama
         uses: ai-action/setup-ollama@v1
 
@@ -32,7 +27,12 @@ jobs:
 
       - if: ${{ steps.cache-ollama.outputs.cache-hit != 'true' }}
         name: Install model
-        run: ollama run llama3.2:3b 'Define caching. Do it with three words.'
+        run: ollama pull llama3.2:1b
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - name: Cache python packages
         id: cache-python
