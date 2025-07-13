@@ -19,9 +19,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
-      - name: Install dependencies
+      - name: Cache python packages
+        id: cache-python
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - if: ${{ steps.cache-python.outputs.cache-hit != 'true' }}
+        name: Install dependencies
         run: pip install pygithub scikit-learn sentence-transformers
 
       - name: Run duplicate detection
