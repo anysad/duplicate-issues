@@ -70,7 +70,7 @@ class DuplicateDeterminer:
         if duplicates:
             comment = '✍️ Potential duplicates:\n'
             for possible_issue in duplicates:
-                comment += f'- [#{possible_issue}]'
+                comment += f'- [#{possible_issue}]\n'
             self.issue.create_comment(comment)
         else:
             print('❌ No similiar issues were found.')
