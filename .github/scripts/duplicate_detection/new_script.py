@@ -19,7 +19,13 @@ class DuplicateDeterminer:
 
         self.system_prompt = {
             'role': 'system',
-            'content': 'You are a helpful assistant if two different github issues are duplicates as if they are the same or very similar. You will be given two issues and you will return a boolean value. If they are duplicates, return True, otherwise return False. Do not return any other text.'
+            'content': (
+                'You are an expert assistant designed to determine if two GitHub issues describe the same underlying problem. '
+                'You will be given a "New Issue" and an "Existing Issue". '
+                'If they clearly describe the same or very similar technical issue, return **only** the word "True". '
+                'If they are unrelated or different issues, return **only** the word "False". '
+                'Do not explain your reasoning. Do not include any other text.'
+            )
         }
     
     def get_issue_description(self, text):
