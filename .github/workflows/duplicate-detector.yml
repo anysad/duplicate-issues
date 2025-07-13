@@ -20,14 +20,23 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Setup Ollama
+      - name: Setup ollama
         uses: ai-action/setup-ollama@v1
+
+      - name: Cache ollama
+        id: cache-ollama
+        uses: actions/cache@v4
         with:
-          name: llama3.2:3b
+          path: ~/.ollama
+          key: ${{ runner.os }}-ollama
+
+      - if: ${{ steps.cache-ollama.outputs.cache-hit != 'true' }}
+        name: Install model
+        run: ollama run llama3.2:3b 'Define caching. Do it with three words.'
 
       - name: Cache python packages
         id: cache-python
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ env.pythonLocation }}-pip-${{ hashFiles('**/requirements.txt') }}
