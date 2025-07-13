@@ -52,7 +52,7 @@ class DuplicateDeterminer:
                 }
             ]
 
-            response = ollama.chat(model='llama3', messages=messages)
+            response = ollama.chat(model='llama3.2:3b', messages=messages)
             result = response['message']['content']
 
             print(f'Comparing two issues: {self.issue_number} and {issue.number}')
