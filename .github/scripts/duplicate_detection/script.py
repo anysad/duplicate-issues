@@ -43,8 +43,9 @@ for issue in repo.get_issues(state='open'):
     issue_embedding = model.encode([issue_text])
 
     similarity = cosine_similarity(new_issue_embedding, issue_embedding)[0][0]
+    print(similarity)
 
-    if similarity > 0.67:
+    if similarity > 0.69: # nice
         similarities.append((issue.number, similarity, issue.title))
 
 if similarities:
