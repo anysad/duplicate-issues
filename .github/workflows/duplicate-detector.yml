@@ -29,7 +29,7 @@ jobs:
 
       - if: ${{ steps.cache-python.outputs.cache-hit != 'true' }}
         name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r scripts/duplicate_detection/requirements.txt
 
       - name: Run duplicate detection
         run: python .github/scripts/duplicate_detection/new_script.py
