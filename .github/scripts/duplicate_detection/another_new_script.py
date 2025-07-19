@@ -35,9 +35,10 @@ duplicates = []
 for issue in open_issues:
     if issue.number == new_issue.number:
         continue
-    title_similarity = fuzz.ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    if title_similarity > threshold:
-        duplicates.append((issue.number, title_similarity))
+    similarity = fuzz.ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    print(similarity)
+    if similarity > threshold:
+        duplicates.append((issue.number, similarity))
 
 if duplicates:
     comment_body = "Potential duplicates found:\n"
