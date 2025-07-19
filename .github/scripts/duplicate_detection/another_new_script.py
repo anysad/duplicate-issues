@@ -24,7 +24,7 @@ def clean_text(text):
 
 def get_issue_description(text):
     match = DESCRIPTION_RE.search(text)
-    return match.group(1).strip() if match else ' '
+    return clean_text(match.group(1).strip()) if match else ' '
     
 def get_issue_str(text):
     match = STR_RE.search(text)
