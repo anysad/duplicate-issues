@@ -55,7 +55,6 @@ for issue in repo.get_issues(state='open'):
         continue
 
     similarity = calculate_similarity(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    print(similarity)
 
     if similarity >= threshold:
         similarities.append((issue.number, similarity, issue.title))
