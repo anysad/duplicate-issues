@@ -25,9 +25,9 @@ def get_issue_str(text):
     
 def get_issue_full_text(issue):
     text = f'Title: {issue.title}\nDescription: {get_issue_description(issue.body)}\n'
-    steps_to_reproduce = get_issue_str(issue.body)
-    if steps_to_reproduce:
-        text += f'Steps to Reproduce: {steps_to_reproduce}\n'
+    # steps_to_reproduce = get_issue_str(issue.body)
+    # if steps_to_reproduce:
+    #     text += f'Steps to Reproduce: {steps_to_reproduce}\n'
     return text
 
 open_issues = repo.get_issues(state='open')
