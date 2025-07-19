@@ -1,7 +1,9 @@
 from sentence_transformers import SentenceTransformer, util
 from github import Github
+from fuzzywuzzy import fuzz
 import os
 import re
+import random
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
@@ -31,9 +33,12 @@ def get_issue_full_text(issue):
         text += f'Steps to Reproduce: {steps_to_reproduce}\n'
     return text
 
-def calculate_similarity(text1, text2):
+def calculate_similarity(text1, text2, weight_embed=0.7, weight_fuzz=0.3):
     embeddings = model.encode([text1, text2])
-    return round(util.cos_sim(embeddings[0], embeddings[1]).item() * 100)
+    cosine_score = util.pytorch_cos_sim(embeddings[0], embeddings[1]).item()
+    fuzz_score = round(fuzz.token_set_ratio(text1, text2) / 100.0)
+    combined = weight_embed * cosine_score + weight_fuzz * fuzz_score
+    return round(combined * 100)
 
 similarities = []
 threshold = 67 # change this value to adjust sensitivity!!!
@@ -42,15 +47,19 @@ for issue in repo.get_issues(state='open'):
         continue
 
     similarity = calculate_similarity(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    print(similarity)
 
     if similarity > threshold:
         similarities.append((issue.number, similarity, issue.title))
 
 if similarities:
-    comment = "✍️ Potential duplicates:\n"
+    if random.random() < 0.01: # joke comment 1% of the time
+        comment = 'dude... I think you lowkey messed up dawg... this is like the 10th time I\'ve seen this issue, you should really check the issues before creating a new one... anyways here are the potential duplicates:\n'
+    else:
+        comment = '✍️ Potential duplicates:\n'
     for number, similarity, title in similarities:
-        print(f"Similarity: {similarity}%")
-        comment += f"- #{number} ({similarity}%)\n"
+        print(f'Similarity: {similarity}%')
+        comment += f'- #{number} ({similarity}%)\n'
     new_issue.create_comment(comment)
 else:
     print('❌ No similiar issues were found.')

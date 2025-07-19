@@ -1,2 +1,3 @@
 pygithub
 sentence_transformers
+fuzzywuzzy
