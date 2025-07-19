@@ -33,24 +33,24 @@ def get_issue_full_text(issue):
 
 def calculate_similarity(text1, text2):
     embeddings = model.encode([text1, text2])
-    return util.cos_sim(embeddings[0], embeddings[1]).item() * 100
+    return round(util.cos_sim(embeddings[0], embeddings[1]).item() * 100)
 
 similarities = []
+threshold = 67 # change this value to adjust sensitivity!!!
 for issue in repo.get_issues(state='open'):
     if issue.number == new_issue.number:
         continue
 
     similarity = calculate_similarity(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    print(similarity)
 
-    if similarity > 0.67:
+    if similarity > threshold:
         similarities.append((issue.number, similarity, issue.title))
 
 if similarities:
     comment = "✍️ Potential duplicates:\n"
     for number, similarity, title in similarities:
-        print(f"Similarity: {similarity * 100:.2f}%")
-        comment += f"- #{number} ({similarity * 100:.2f}%)\n"
+        print(f"Similarity: {similarity:.2f}%")
+        comment += f"- #{number} ({similarity:.2f}%)\n"
     new_issue.create_comment(comment)
 else:
     print('❌ No similiar issues were found.')
