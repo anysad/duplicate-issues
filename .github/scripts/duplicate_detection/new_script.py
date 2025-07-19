@@ -5,7 +5,6 @@ import ollama
 
 DESCRIPTION_RE = re.compile(r'Description.*?\n(.*?)(?:\n## |\Z)', re.DOTALL)
 STR_RE = re.compile(r'Steps to Reproduce.*?\n(.*?)(?:\n## |\Z)', re.DOTALL)
-ollama.embeddings()
 
 class DuplicateDeterminer:
     def __init__(self):
