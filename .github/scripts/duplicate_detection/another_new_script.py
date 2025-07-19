@@ -29,13 +29,18 @@ def get_issue_full_text(issue):
         text += f'Steps to Reproduce: {steps_to_reproduce}\n'
     return text
 
+def calculate_similarity(text1, text2):
+    token_set_score = fuzz.token_set_ratio(text1, text2)
+    partial_score = fuzz.partial_ratio(text1, text2)
+    return 0.7 * token_set_score + 0.3 * partial_score
+
 open_issues = repo.get_issues(state='open')
-threshold = 65
+threshold = 65 # change this value to adjust sensitivity!!!
 duplicates = []
 for issue in open_issues:
     if issue.number == new_issue.number:
         continue
-    similarity = fuzz.token_set_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    similarity = calculate_similarity(get_issue_full_text(new_issue), get_issue_full_text(issue))
     print(similarity)
     if similarity > threshold:
         duplicates.append((issue.number, similarity))
