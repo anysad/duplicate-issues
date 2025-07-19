@@ -41,7 +41,7 @@ def calculate_similarity(text1, text2, weight_embed=0.7, weight_fuzz=0.3):
     return round(combined * 100)
 
 similarities = []
-threshold = 67 # change this value to adjust sensitivity!!!
+threshold = 80 # change this value to adjust sensitivity!!!
 for issue in repo.get_issues(state='open'):
     if issue.number == new_issue.number:
         continue
