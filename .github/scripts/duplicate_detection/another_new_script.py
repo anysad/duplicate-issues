@@ -32,7 +32,7 @@ def get_issue_full_text(issue):
 def calculate_similarity(text1, text2):
     token_set_score = fuzz.token_set_ratio(text1, text2)
     partial_score = fuzz.partial_ratio(text1, text2)
-    return 0.7 * token_set_score + 0.3 * partial_score
+    return round(0.8 * token_set_score + 0.2 * partial_score)
 
 open_issues = repo.get_issues(state='open')
 threshold = 65 # change this value to adjust sensitivity!!!
