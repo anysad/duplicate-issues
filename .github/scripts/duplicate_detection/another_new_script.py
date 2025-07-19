@@ -11,8 +11,8 @@ github_client = Github(token)
 repo = github_client.get_repo(repname)
 new_issue = repo.get_issue(int(issue_number))
 
-DESCRIPTION_RE = re.compile(r'Description.*?\n(.*?)(?:\n## |\Z)', re.DOTALL)
-STR_RE = re.compile(r'Steps to Reproduce.*?\n(.*?)(?:\n## |\Z)', re.DOTALL)
+DESCRIPTION_RE = re.compile(r'(?i)Description:?\s*\n(.*?)(?:\n## |\Z)', re.DOTALL)
+STR_RE = re.compile(r'(?i)Steps to Reproduce:?\s*\n(.*?)(?:\n## |\Z)', re.DOTALL)
 
 def get_issue_description(text):
     match = DESCRIPTION_RE.search(text)
@@ -35,9 +35,12 @@ duplicates = []
 for issue in open_issues:
     if issue.number == new_issue.number:
         continue
-    similarity = fuzz.ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    print(similarity)
-    if similarity > threshold:
+    similarity1 = fuzz.ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    similarity2 = fuzz.partial_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    similarity3 = fuzz.token_sort_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    similarity4 = fuzz.token_set_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    print(similarity1, similarity2, similarity3, similarity4)
+    if similarity1 > threshold:
         duplicates.append((issue.number, similarity))
 
 if duplicates:
