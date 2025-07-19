@@ -14,14 +14,6 @@ new_issue = repo.get_issue(int(issue_number))
 DESCRIPTION_RE = re.compile(r'##\s*Description.*?\n(.*?)(?=\n## |\Z)', re.DOTALL)
 STR_RE = re.compile(r'(?i)Steps to Reproduce:?\s*\n(.*?)(?:\n## |\Z)', re.DOTALL)
 
-exclude_words = {'the', 'and', 'a', 'an', 'as', 'at', 'are', 'by', 'when', 'well', 'is', 'it', 'in', 'to', 'till', 'until', 'until', 'or', 'on', 'into', 'outo'}
-
-def clean_text(text):
-    text = re.sub(r'\s+', ' ', text)
-    text = re.sub(r'[^\w\s]', '', text)
-    words = text.split()
-    return ' '.join(word for word in words if word.lower() not in exclude_words)
-
 def get_issue_description(text):
     match = DESCRIPTION_RE.search(text)
     return match.group(1).strip() if match else ' '
@@ -37,10 +29,8 @@ def get_issue_full_text(issue):
         text += f'Steps to Reproduce: {steps_to_reproduce}\n'
     return text
 
-print(get_issue_full_text(new_issue))
-
 open_issues = repo.get_issues(state='open')
-threshold = 75
+threshold = 65
 duplicates = []
 for issue in open_issues:
     if issue.number == new_issue.number:
