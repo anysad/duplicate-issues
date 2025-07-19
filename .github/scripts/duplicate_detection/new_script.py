@@ -46,7 +46,7 @@ class DuplicateDeterminer:
                 self.system_prompt,
                 {
                     'role': 'user',
-                    'content': f'Are these two issues the same or nearly the same? New Issue:\n <TITLE>${self.new_issue.title}</TITLE>\n <DESCRIPTION>${self.new_issue.body}</DESCRIPTION>\n\n Existing Issue:\n <TITLE>${issue.title}</TITLE>\n <DESCRIPTION>${issue.body}</DESCRIPTION>\n'
+                    'content': f'/no_think \nAre these two issues the same or nearly the same? New Issue:\n <TITLE>${self.new_issue.title}</TITLE>\n <DESCRIPTION>${self.new_issue.body}</DESCRIPTION>\n\n Existing Issue:\n <TITLE>${issue.title}</TITLE>\n <DESCRIPTION>${issue.body}</DESCRIPTION>\n'
                 }
             ]
 
