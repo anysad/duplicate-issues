@@ -31,7 +31,7 @@ def get_issue_full_text(issue):
     return text
 
 open_issues = repo.get_issues(state='open')
-threshold = 70
+threshold = 75
 duplicates = []
 for issue in open_issues:
     if issue.number == new_issue.number:
@@ -42,9 +42,9 @@ for issue in open_issues:
         duplicates.append((issue.number, similarity))
 
 if duplicates:
-    comment_body = "Potential duplicates found:\n"
+    comment_body = '✍️ Potential duplicates:\n'
     for dup in duplicates:
-        comment_body += f"- #{dup[0]}: Similarity: {dup[1]}%\n"
+        comment_body += f'- #{dup[0]} (Similarity {dup[1]}%)\n'
     new_issue.create_comment(comment_body)
 else:
     print('❌ No similiar issues were found.')
