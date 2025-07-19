@@ -14,7 +14,7 @@ class DuplicateDeterminer:
 
         self.github_client = Github(self.github_token)
         self.repo = self.github_client.get_repo(self.repname)
-        self.new_issue = self.repo.get_issue(int(self.issue_number))
+        self.new_issue = self.repo.get_issue(int(self.new_issue_number))
 
         self.system_prompt = {
             'role': 'system',
