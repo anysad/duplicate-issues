@@ -11,7 +11,7 @@ github_client = Github(token)
 repo = github_client.get_repo(repname)
 new_issue = repo.get_issue(int(issue_number))
 
-DESCRIPTION_RE = re.compile(r'(?i)Description:?\s*\n(.*?)(?:\n## |\Z)', re.DOTALL)
+DESCRIPTION_RE = re.compile(r'##\s*Description.*?\n(.*?)(?=\n## |\Z)', re.DOTALL)
 STR_RE = re.compile(r'(?i)Steps to Reproduce:?\s*\n(.*?)(?:\n## |\Z)', re.DOTALL)
 
 exclude_words = {'the', 'and', 'a', 'an', 'as', 'at', 'are', 'by', 'when', 'well', 'is', 'it', 'in', 'to', 'till', 'until', 'until', 'or', 'on', 'into', 'outo'}
