@@ -27,7 +27,7 @@ jobs:
 
       - if: ${{ steps.cache-ollama.outputs.cache-hit != 'true' }}
         name: Install model
-        run: ollama pull llama3.2:3b
+        run: ollama pull qwen3:0.6b
 
       - name: Setup python
         uses: actions/setup-python@v5
