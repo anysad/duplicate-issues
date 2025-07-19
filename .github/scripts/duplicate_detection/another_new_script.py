@@ -2,6 +2,7 @@ import os
 from fuzzywuzzy import fuzz
 from github import Github
 import re
+import statistics
 
 token = os.getenv('GITHUB_TOKEN')
 repname = os.getenv('GITHUB_REPOSITORY')
@@ -30,19 +31,15 @@ def get_issue_full_text(issue):
     return text
 
 open_issues = repo.get_issues(state='open')
-threshold = 80
+threshold = 70
 duplicates = []
 for issue in open_issues:
     if issue.number == new_issue.number:
         continue
-    similarity1 = fuzz.ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    similarity2 = fuzz.partial_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    similarity3 = fuzz.token_sort_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    similarity4 = fuzz.token_set_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    similarity = max(similarity1, similarity2, similarity3, similarity4)
-    print(similarity1, similarity2, similarity3, similarity4, similarity)
-    if similarity1 > threshold:
-        duplicates.append((issue.number, similarity1))
+    similarity = fuzz.token_set_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    print(similarity)
+    if similarity > threshold:
+        duplicates.append((issue.number, similarity))
 
 if duplicates:
     comment_body = "Potential duplicates found:\n"
