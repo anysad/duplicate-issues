@@ -15,19 +15,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup ollama
-        uses: ai-action/setup-ollama@v1
+      # - name: Setup ollama
+      #   uses: ai-action/setup-ollama@v1
 
-      - name: Cache ollama
-        id: cache-ollama
-        uses: actions/cache@v4
-        with:
-          path: ~/.ollama
-          key: ${{ runner.os }}-ollama
+      # - name: Cache ollama
+      #   id: cache-ollama
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.ollama
+      #     key: ${{ runner.os }}-ollama
 
-      - if: ${{ steps.cache-ollama.outputs.cache-hit != 'true' }}
-        name: Install model
-        run: ollama pull qwen3:0.6b
+      # - if: ${{ steps.cache-ollama.outputs.cache-hit != 'true' }}
+      #   name: Install model
+      #   run: ollama pull qwen3:0.6b
 
       - name: Setup python
         uses: actions/setup-python@v5
@@ -43,10 +43,10 @@ jobs:
 
       - if: ${{ steps.cache-python.outputs.cache-hit != 'true' }}
         name: Install dependencies
-        run: pip install ollama pygithub
+        run: pip install pygithub fuzzywuzzy
 
       - name: Run duplicate detection
-        run: python .github/scripts/duplicate_detection/new_script.py
+        run: python .github/scripts/duplicate_detection/another_new_script.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
