@@ -1,3 +1,4 @@
 pygithub
 sentence_transformers
 fuzzywuzzy
+python-Levenshtein

@@ -18,13 +18,21 @@ new_issue = repo.get_issue(int(issue_number))
 DESCRIPTION_RE = re.compile(r'##\s*Description.*?\n(.*?)(?=\n## |\Z)', re.DOTALL)
 STR_RE = re.compile(r'(?i)Steps to Reproduce:?\s*\n(.*?)(?:\n## |\Z)', re.DOTALL)
 
+exclude_words = {'the', 'and', 'a', 'an', 'as', 'at', 'are', 'by', 'when', 'well', 'is', 'it', 'in', 'to', 'till', 'until', 'until', 'or', 'on', 'into', 'outo'}
+
+def clean_text(text):
+    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r'[^\w\s]', '', text)
+    words = text.split()
+    return ' '.join(word for word in words if word.lower() not in exclude_words)
+
 def get_issue_description(text):
     match = DESCRIPTION_RE.search(text)
-    return match.group(1).strip() if match else ' '
+    return clean_text(match.group(1).strip()) if match else ' '
     
 def get_issue_str(text):
     match = STR_RE.search(text)
-    return match.group(1).strip() if match else ' '
+    return clean_text(match.group(1).strip()) if match else ' '
 
 def get_issue_full_text(issue):
     text = f'Title: {issue.title}\nDescription: {get_issue_description(issue.body)}\n'
@@ -49,7 +57,7 @@ for issue in repo.get_issues(state='open'):
     similarity = calculate_similarity(get_issue_full_text(new_issue), get_issue_full_text(issue))
     print(similarity)
 
-    if similarity > threshold:
+    if similarity >= threshold:
         similarities.append((issue.number, similarity, issue.title))
 
 if similarities:
