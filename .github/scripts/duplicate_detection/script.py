@@ -1,5 +1,4 @@
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer, util
 from github import Github
 import os
 import re
@@ -12,37 +11,37 @@ issue_number = os.getenv('ISSUE_NUMBER')
 
 github_client = Github(token)
 repo = github_client.get_repo(repname)
-
-def get_description(text):
-    match = re.search(r'Description.*?\n(.*?)(?:\n## |\Z)', text, re.DOTALL)
-    if match:
-        return match.group(1).strip()
-    return None
-
-def get_str(text):
-    match = re.search(r'Steps to Reproduce.*?\n(.*?)(?:\n## |\Z)', text, re.DOTALL)
-    if match:
-        return match.group(1).strip()
-    return None
-
 new_issue = repo.get_issue(int(issue_number))
 
-new_issue_desc = get_description(new_issue.body)
-new_issue_str = get_str(new_issue.body)
-new_issue_text = new_issue.title + " " + (new_issue_desc or " ") + " " + (new_issue_str or " ")
-new_issue_embedding = model.encode([new_issue_text])
+DESCRIPTION_RE = re.compile(r'##\s*Description.*?\n(.*?)(?=\n## |\Z)', re.DOTALL)
+STR_RE = re.compile(r'(?i)Steps to Reproduce:?\s*\n(.*?)(?:\n## |\Z)', re.DOTALL)
+
+def get_issue_description(text):
+    match = DESCRIPTION_RE.search(text)
+    return match.group(1).strip() if match else ' '
+    
+def get_issue_str(text):
+    match = STR_RE.search(text)
+    return match.group(1).strip() if match else ' '
+
+def get_issue_full_text(issue):
+    text = f'Title: {issue.title}\nDescription: {get_issue_description(issue.body)}\n'
+    steps_to_reproduce = get_issue_str(issue.body)
+    if steps_to_reproduce:
+        text += f'Steps to Reproduce: {steps_to_reproduce}\n'
+    return text
+
+def calculate_similarity(text1, text2):
+    embeddings = model.encode([text1, text2])
+    return util.cos_sim(embeddings[0], embeddings[1]).item() * 100
 
 similarities = []
 for issue in repo.get_issues(state='open'):
     if issue.number == new_issue.number:
         continue
 
-    issue_desc = get_description(issue.body)
-    issue_str = get_str(issue.body)
-    issue_text = issue.title + " " + (issue_desc or " ") + " " + (issue_str or " ")
-    issue_embedding = model.encode([issue_text])
-
-    similarity = cosine_similarity(new_issue_embedding, issue_embedding)[0][0]
+    similarity = calculate_similarity(get_issue_full_text(new_issue), get_issue_full_text(issue))
+    print(similarity)
 
     if similarity > 0.67:
         similarities.append((issue.number, similarity, issue.title))
