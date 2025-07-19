@@ -39,9 +39,10 @@ for issue in open_issues:
     similarity2 = fuzz.partial_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
     similarity3 = fuzz.token_sort_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
     similarity4 = fuzz.token_set_ratio(get_issue_full_text(new_issue), get_issue_full_text(issue))
-    print(similarity1, similarity2, similarity3, similarity4)
+    similarity = max(similarity1, similarity2, similarity3, similarity4)
+    print(similarity1, similarity2, similarity3, similarity4, similarity)
     if similarity1 > threshold:
-        duplicates.append((issue.number, similarity))
+        duplicates.append((issue.number, similarity1))
 
 if duplicates:
     comment_body = "Potential duplicates found:\n"
