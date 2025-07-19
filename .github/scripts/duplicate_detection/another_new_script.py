@@ -24,11 +24,11 @@ def clean_text(text):
 
 def get_issue_description(text):
     match = DESCRIPTION_RE.search(text)
-    return clean_text(match.group(1).strip()) if match else ' '
+    return match.group(1).strip() if match else ' '
     
 def get_issue_str(text):
     match = STR_RE.search(text)
-    return clean_text(match.group(1).strip()) if match else ' '
+    return match.group(1).strip() if match else ' '
     
 def get_issue_full_text(issue):
     text = f'Title: {issue.title}\nDescription: {get_issue_description(issue.body)}\n'
