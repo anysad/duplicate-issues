@@ -49,8 +49,8 @@ for issue in repo.get_issues(state='open'):
 if similarities:
     comment = "✍️ Potential duplicates:\n"
     for number, similarity, title in similarities:
-        print(f"Similarity: {similarity:.2f}%")
-        comment += f"- #{number} ({similarity:.2f}%)\n"
+        print(f"Similarity: {similarity}%")
+        comment += f"- #{number} ({similarity}%)\n"
     new_issue.create_comment(comment)
 else:
     print('❌ No similiar issues were found.')
